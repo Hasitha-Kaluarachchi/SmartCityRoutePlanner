@@ -1,62 +1,52 @@
 package smartcityrouteplanner;
 
-import java.util.*;  // Import useful classes like HashMap, ArrayList, Queue, etc.
+import java.util.*;
 
-/*
- * ----------------------------------------------------------
- * GRAPH CLASS
- * ----------------------------------------------------------
- * - Represents all locations and roads (connections).
- * - Uses an Adjacency List (HashMap).
- * - Includes BFS traversal using Queue.
- * ----------------------------------------------------------
- */
 public class Graph {
 
-    // Key = location name, Value = list of connected locations
+    // Store locations and their connected roads
     private Map<String, List<String>> graph;
 
-    // Constructor: create an empty graph
+    // Constructor
     public Graph() {
         graph = new HashMap<>();
     }
 
-    // Add a new location (node) to the graph
+    // Add a location (only adds if not already present)
     public void addLocation(String location) {
         if (!graph.containsKey(location)) {
-            graph.put(location, new ArrayList<>());  // empty list for roads
-            System.out.println(location + " added successfully.");
+            graph.put(location, new ArrayList<>());
+            System.out.println(location + " added to the city network.");
         } else {
             System.out.println("Location already exists!");
         }
     }
 
-    // Remove a location and all its connections
+    // Remove a location and all roads connected to it
     public void removeLocation(String location) {
         if (graph.containsKey(location)) {
-            graph.remove(location);  // remove location key
-            // also remove it from all other connected lists
+            graph.remove(location);
             for (String key : graph.keySet()) {
                 graph.get(key).remove(location);
             }
-            System.out.println(location + " removed successfully.");
+            System.out.println(location + " removed from the city network.");
         } else {
             System.out.println("Location not found!");
         }
     }
 
-    // Add a road (edge) between two locations
+    // Add a two-way road between locations
     public void addRoad(String src, String dest) {
         if (graph.containsKey(src) && graph.containsKey(dest)) {
             graph.get(src).add(dest);
-            graph.get(dest).add(src);  // because it's a two-way road
+            graph.get(dest).add(src);
             System.out.println("Road added between " + src + " and " + dest);
         } else {
             System.out.println("Both locations must exist first!");
         }
     }
 
-    // Remove a road (edge) between two locations
+    // Remove a road between two locations
     public void removeRoad(String src, String dest) {
         if (graph.containsKey(src) && graph.get(src).contains(dest)) {
             graph.get(src).remove(dest);
@@ -67,7 +57,7 @@ public class Graph {
         }
     }
 
-    // Show all locations and their connections
+    // Display all roads and connections
     public void displayConnections() {
         System.out.println("\n--- All City Connections ---");
         for (String location : graph.keySet()) {
@@ -75,24 +65,22 @@ public class Graph {
         }
     }
 
-    // BFS traversal (uses Queue)
+    // BFS traversal using Queue (Queue example)
     public void bfsTraversal(String start) {
         if (!graph.containsKey(start)) {
             System.out.println("Starting location not found!");
             return;
         }
 
-        Set<String> visited = new HashSet<>();  // track visited nodes
-        Queue<String> queue = new LinkedList<>();  // queue for BFS
-
+        Set<String> visited = new HashSet<>();
+        Queue<String> queue = new LinkedList<>();
         queue.add(start);
         visited.add(start);
 
-        System.out.println("\nBFS Traversal starting from " + start + ":");
+        System.out.println("\nBFS Traversal from " + start + ":");
         while (!queue.isEmpty()) {
             String current = queue.poll();
             System.out.print(current + " ");
-
             for (String neighbor : graph.get(current)) {
                 if (!visited.contains(neighbor)) {
                     visited.add(neighbor);
@@ -103,3 +91,4 @@ public class Graph {
         System.out.println();
     }
 }
+
